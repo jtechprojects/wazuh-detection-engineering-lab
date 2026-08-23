@@ -60,6 +60,7 @@ net.exe user
 NET USER
 net1.exe user
 net user administrator
+```
 
 ### Rule 100103 — Privileged Group Discovery
 
@@ -74,3 +75,4 @@ net localgroup administrators
 net.exe localgroup administrators
 net1.exe localgroup administrators
 NET LOCALGROUP ADMINISTRATORS
+```
