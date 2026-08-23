@@ -139,3 +139,5 @@ By testing the custom detections from multiple shells and with different Windows
 ## Disclaimer
 
 All activity documented in this repository was performed in an isolated home lab environment for educational and defensive security purposes.
+
+Detailed testing methodology and results are available in [Detection Testing & Tuning](docs/detection-testing.md).
