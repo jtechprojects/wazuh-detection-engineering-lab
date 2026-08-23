@@ -76,3 +76,36 @@ net.exe localgroup administrators
 net1.exe localgroup administrators
 NET LOCALGROUP ADMINISTRATORS
 ```
+
+The original version of this rule required `powershell.exe` to be the parent process. Testing revealed that executing the same discovery command from Command Prompt bypassed the detection.
+
+To improve coverage, the PowerShell parent-process requirement was removed so the rule focuses on the discovery behavior rather than the shell used to execute it.
+
+Additional testing showed that `net1.exe` could also bypass the original detection. The image-matching logic was updated to detect both `net.exe` and `net1.exe`.
+
+The final rule was successfully tested from both PowerShell and Command Prompt.
+
+## Detection Engineering Process
+
+The detections were developed using an iterative process:
+
+**Generate Activity → Analyze Telemetry → Build Detection → Test → Identify Gaps → Tune → Retest**
+
+Testing the custom rules revealed multiple detection gaps that were corrected through rule tuning:
+
+- **Shell dependency:** The original rules relied on `powershell.exe` as the parent process, allowing the same discovery activity executed through Command Prompt to bypass detection.
+- **Executable variation:** The original rules detected `net.exe`, but testing showed that `net1.exe` could perform the same discovery activity without triggering the detection.
+- **Case variation:** Commands were tested using variations such as `net user`, `NET USER`, and `net1.exe USER`.
+- **Negative testing:** Unrelated commands such as `net start` were tested to confirm that the account discovery rule did not trigger on all `net.exe` activity.
+
+The final detections focus more on the discovery behavior itself rather than a specific shell or executable variation.
+
+## Key Takeaways
+
+This project demonstrated that successfully triggering an alert does not necessarily mean a detection is complete. Effective detection engineering requires testing rules against alternate execution methods, identifying false negatives, evaluating false positives, and tuning detection logic while maintaining useful coverage.
+
+By testing the custom detections from multiple shells and with different Windows utilities, I was able to identify weaknesses in the original rules and improve their resilience.
+
+## Disclaimer
+
+All activity documented in this repository was performed in an isolated home lab environment for educational and defensive security purposes.
