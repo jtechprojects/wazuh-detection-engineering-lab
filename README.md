@@ -100,6 +100,36 @@ Testing the custom rules revealed multiple detection gaps that were corrected th
 
 The final detections focus more on the discovery behavior itself rather than a specific shell or executable variation.
 
+### Rule 100102 — Account Discovery
+
+The final account discovery rule generated a Level 10 Wazuh alert when account enumeration was performed using `net1.exe`.
+
+![Rule 100102 Account Discovery Alert](screenshots/100102-account-discovery-alert.png)
+
+The underlying Sysmon telemetry confirmed the execution of `net1.exe user` from Command Prompt. This validated that the final rule was no longer dependent on PowerShell as the parent process.
+
+![Rule 100102 net1.exe CMD Telemetry](screenshots/100102-net1-cmd-telemetry.png)
+
+The resulting alert was mapped to **MITRE ATT&CK T1087 — Account Discovery**.
+
+![Rule 100102 MITRE ATT&CK Mapping](screenshots/100102-mitre-mapping.png)
+
+
+### Rule 100103 — Privileged Group Discovery
+
+The final privileged group discovery rule successfully detected enumeration of the local Administrators group.
+
+![Rule 100103 Privileged Group Discovery Alert](screenshots/100103-privileged-group-discovery-alert.png)
+
+Sysmon process telemetry was used to validate the command execution and process relationship.
+
+![Rule 100103 net1.exe Telemetry](screenshots/100103-net1-ps-telemetry.png)
+
+The resulting alert was mapped to **MITRE ATT&CK T1069.001 — Permission Groups Discovery: Local Groups**.
+
+![Rule 100103 MITRE ATT&CK Mapping](screenshots/100103-mitre-mapping.png)
+
+
 ## Key Takeaways
 
 This project demonstrated that successfully triggering an alert does not necessarily mean a detection is complete. Effective detection engineering requires testing rules against alternate execution methods, identifying false negatives, evaluating false positives, and tuning detection logic while maintaining useful coverage.
