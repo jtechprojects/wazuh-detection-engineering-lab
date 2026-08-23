@@ -60,3 +60,17 @@ net.exe user
 NET USER
 net1.exe user
 net user administrator
+
+### Rule 100103 — Privileged Group Discovery
+
+Detects enumeration of the local Administrators group using `net.exe` or `net1.exe`.
+
+**MITRE ATT&CK:** T1069.001 — Permission Groups Discovery: Local Groups
+
+Examples detected:
+
+```text
+net localgroup administrators
+net.exe localgroup administrators
+net1.exe localgroup administrators
+NET LOCALGROUP ADMINISTRATORS
