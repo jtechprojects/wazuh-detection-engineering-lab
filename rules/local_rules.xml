@@ -1,0 +1,44 @@
+<!--
+  Wazuh Detection Engineering Lab
+  Custom Windows/Sysmon detection rules
+
+  Rule 100102: Account Discovery using net.exe/net1.exe
+  Rule 100103: Local Administrators Group Discovery using net.exe/net1.exe
+-->
+
+<group name="windows,sysmon,detection_engineering,">
+
+  <!-- Rule 100102: Windows Account Discovery -->
+  <rule id="100102" level="10">
+    <if_group>sysmon_event1</if_group>
+
+    <field name="win.eventdata.image" type="pcre2">(?i)\\net1?\.exe$</field>
+    <field name="win.eventdata.commandLine" type="pcre2">(?i)\buser\b</field>
+
+    <description>Potential Windows account discovery using net user</description>
+
+    <mitre>
+      <id>T1087</id>
+    </mitre>
+
+    <group>account_discovery,sysmon,</group>
+  </rule>
+
+
+  <!-- Rule 100103: Local Administrators Group Discovery -->
+  <rule id="100103" level="10">
+    <if_group>sysmon_event1</if_group>
+
+    <field name="win.eventdata.image" type="pcre2">(?i)\\net1?\.exe$</field>
+    <field name="win.eventdata.commandLine" type="pcre2">(?i)\blocalgroup\b.*\badministrators\b</field>
+
+    <description>Potential privileged group discovery using net localgroup administrators</description>
+
+    <mitre>
+      <id>T1069.001</id>
+    </mitre>
+
+    <group>permission_groups_discovery,sysmon,</group>
+  </rule>
+
+</group>
